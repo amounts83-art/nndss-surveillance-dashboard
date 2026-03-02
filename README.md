@@ -15,7 +15,7 @@ Key modeling decision: `Reporting Area` is mixed grain in the raw feed (totals/r
 
 ## Measurement rules (defensibility)
 - Plotting rule: `current_week_0 = COALESCE(Current week, 0)` for stable visuals.
-- Trend conclusions are gated by coverage metadata, not by `current_week_0` alone.
+- Trend conclusions are gated by coverage metadata (`trend_mode`), not by `current_week_0` alone.
 - Percent-change rankings require a baseline threshold (avoid small-denominator inflation).
 - Extreme drops/spikes are flagged for QC review (do not treat as signal until verified).
 - Direction is interpreted via a short moving average (4-week) rather than single-week noise.
@@ -23,15 +23,15 @@ Key modeling decision: `Reporting Area` is mixed grain in the raw feed (totals/r
 ## Build pipeline (BigQuery)
 Authoritative scripts are in `/sql` and run in this order:
 
-1) `sql/10_build_state_fact.sql`
-   - Builds `public_health_portfolio.tbl_nndss_state_fact` at grain state × condition × MMWR week.
+1) `sql/10_build_state_fact.sql`  
+   Builds `public_health_portfolio.tbl_nndss_state_fact` at grain **state × condition × MMWR week**.
 
-2) `sql/20_build_coverage_gating.sql`
-   - Builds `public_health_portfolio.tbl_nndss_state_condition_coverage` at grain state × condition.
-   - Fields: `last_yearweek_available`, `n_weeks_observed`, `weeks_behind_max`, `trend_mode`.
+2) `sql/20_build_coverage_gating.sql`  
+   Builds `public_health_portfolio.tbl_nndss_state_condition_coverage` at grain **state × condition**.  
+   Fields: `last_yearweek_available`, `n_weeks_observed`, `weeks_behind_max`, `trend_mode`.
 
-3) `sql/30_build_tableau_export.sql`
-   - Builds `public_health_portfolio.tbl_tableau_export` (denormalized export for Tableau).
+3) `sql/30_build_tableau_export.sql`  
+   Builds `public_health_portfolio.tbl_tableau_export` (denormalized export for Tableau).
 
 ## Outputs
 Tables:
@@ -40,7 +40,7 @@ Tables:
 - `public_health_portfolio.tbl_tableau_export`
 
 Dashboard (Tableau):
-- Trend view: selected state vs other states (avg), weekly, with smoothing (4-week MA).
+- Trend view: selected state vs **other states (average)**, weekly, smoothed (4-week MA).
 - Coverage map: trendability/compliance status with explicit last-available week.
 
 ## Validation checks (quick)
@@ -49,8 +49,9 @@ Dashboard (Tableau):
 - Coverage: `trend_mode` reflects observed weeks and recency (`weeks_behind_max`).
 
 ## Tableau Public
-Add your Tableau Public link here: <PASTE_LINK>
+https://public.tableau.com/app/profile/anthony.mounts/viz/NNDSS_Trend_Coverage_Dashboard/NNDSSConditiontrendcoverage
 
 ## Repo layout
 - `/sql` BigQuery build scripts
-- `/docs` notes (add KPI dictionary, validation notes, limitations)
+- `/docs/README_SQL.md` pipeline notes (assumptions + execution order)
+- `/docs/KPI_dictionary.md` KPI/field definitions + gating semantics
