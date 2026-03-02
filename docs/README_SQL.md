@@ -1,5 +1,7 @@
 # SQL build scripts (BigQuery)
 
+## Tableau Public
+https://public.tableau.com/app/profile/anthony.mounts/viz/NNDSS_Trend_Coverage_Dashboard/NNDSSConditiontrendcoverage
 This folder contains the authoritative BigQuery scripts used to build the curated Tableau-ready dataset for the NNDSS surveillance prototype.
 
 ## Execution order
