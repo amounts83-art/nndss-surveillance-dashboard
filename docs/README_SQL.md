@@ -25,3 +25,4 @@ This portfolio build uses a static snapshot. In production, the pipeline would b
 - schema drift in the source feed
 - sudden spikes/drops flagged to a QC review queue before interpretation
 - coverage regression (trend_mode changes over time)
+- /docs/limitations.md limitations and interpretation rules
