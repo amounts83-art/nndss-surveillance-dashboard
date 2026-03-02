@@ -19,3 +19,9 @@ This folder contains the authoritative BigQuery scripts used to build the curate
   - `Current week_ flag`, `Cumulative YTD Current MMWR Year`, `Cumulative YTD Current MMWR Year_ flag`
   - `Cumulative YTD Previous MMWR Year`, `Cumulative YTD Previous MMWR Year_ flag`
 - Trend conclusions must be gated by the **coverage/gating layer** (provided in separate scripts when added), not by `current_week_0` alone.
+## Refresh & monitoring (not implemented)
+This portfolio build uses a static snapshot. In production, the pipeline would be scheduled to refresh weekly, with monitoring for:
+- late/backfilled reporting (week revisions)
+- schema drift in the source feed
+- sudden spikes/drops flagged to a QC review queue before interpretation
+- coverage regression (trend_mode changes over time)
